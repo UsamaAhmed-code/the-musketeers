@@ -11,4 +11,4 @@ Our customer is the one who is looking for a real-time web based application to 
 # Design Philosophy
 Never assume a solution as the final Answer because nothing is final. Always try to work in interfaces as it is easy to modify smaller parts than whole program and clarity gives better understandig and better understanding means better modification.
 # Trello 
-Link : 
+Link : https://trello.com/b/OVU08fcJ/discord20
