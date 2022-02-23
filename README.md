@@ -19,7 +19,7 @@ Link : https://trello.com/b/OVU08fcJ/evernote20
 > successfully connected server page and Database with Django api.
 ## What is slipped?
 > GitHub commits
-## what is feedback does your group have on dilivered work?
+## what is feedback does your group have on delivered work?
 > we need increase our working time together.
 > learn more about Github.
 > Time management
