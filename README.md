@@ -13,3 +13,13 @@ Our customer is the one who is looking for a web based application to save their
 Never assume a solution as the final Answer because nothing is final. Always try to work in interfaces as it is easy to modify smaller parts than whole program and clarity gives better understandig and better understanding means better modification.
 # Trello 
 Link : https://trello.com/b/OVU08fcJ/evernote20
+# Sprint Review
+## What is done?
+> we have finished our first sprint successfully.
+> successfully connected server page and Database with Django api.
+## What is slipped?
+> GitHub commits
+## what is feedback does your group have on dilivered work?
+> we need increase our working time together.
+> learn more about Github.
+> Time management
