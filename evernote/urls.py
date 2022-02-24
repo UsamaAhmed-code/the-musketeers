@@ -6,6 +6,6 @@ from . import views
 #the url patterns store all the urls that are being used. here its the main.
 urlpatterns = [
     path('', views.home, name="home"),
-    path('/create', views.create, name="create1")
+    path('/admin', admin, name="admin")
     
 ]
