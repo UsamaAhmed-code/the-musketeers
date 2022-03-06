@@ -1,0 +1,22 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+           
+            h1{text-align: center}
+        </style>
+        <meta charset="utf-8">
+        <meta name="home" content="width=device-width, initial-scale=1">
+        <title>Count page</title>
+    </head>
+    <body>
+        <img src= "{% static '/image/logo.png'  %}"width='200' length='250' >
+        <h1 style="background-color:rgb(44, 185, 25);" >Welcome To Evernote</h1>
+        <h2>The Page Count is {{items.content}}</h2> 
+    
+       
+
+    </body>
+</html>
