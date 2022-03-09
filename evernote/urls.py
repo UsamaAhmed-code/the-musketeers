@@ -1,17 +1,11 @@
-from inspect import BlockFinder
-from urllib.parse import urlparse
+ feature/user
+from multiprocessing.spawn import import_main_path
 from django.urls import URLPattern, path
-from . import views
-
-#the url patterns store all the urls that are being used. here its the main.
-urlpatterns = [
-    path('', views.home, name="home"),
-    path('/admin', admin, name="admin")
-    
-]
-from django.urls import path
 from evernote import views
 
 urlpatterns = [
-    path("", views.home, name="home"),
+   path('', views.loginpage, name= "login"),
+    path('register/', views.registerpage, name= "register"),
+    path('home/', views.home, name= "home")
 ]
+
