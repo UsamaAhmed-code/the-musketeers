@@ -5,22 +5,29 @@
     <body>
         {% load static %}
         <style>
-            
-            div{
-                padding-top: 50px;
-            }
+           
             h1{text-align: center}
-        
+            input.right {
+        float: right;
+      }
         </style>
         <meta charset="utf-8">
         <meta name="home" content="width=device-width, initial-scale=1">
         <title>Count page</title>
-       <img src="{% static '/image/Evernotelogo.png'  %}" width="100" length="150">
-
-        <h1 style="background-color:rgb(44, 185, 25);">Welcome To Evernote <a href="{% url 'login'%}"><button>logout </button></a></h1>  
-        
+    <div>
+          <div>
+               <div><img src="{% static '/image/Evernotelogo.png'  %}" width="60" length="100"></div>
+               <div><input type="button" value="logout" class="right"></div>
+            </div> 
+                <div><h1 style="background-color:rgb(44, 185, 25);">Welcome To Evernote </h1></div>  
+           
+           <div> 
+                   <div><h2>the page count is  {{items.content}}</h2></div><div><input type="text" placeholder="Search.."></div>
+                
+            </div>       
+    </div>
       
-        <h2>the page count is  {{items.content}}</h2>
+       
       
     </body>
 </html>
