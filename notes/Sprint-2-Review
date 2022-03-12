@@ -1,1 +1,12 @@
+# what is done?
+ 
+ the user can signup to website. the user enter the name, email and password. all data will be store in the database. the user login to website with same cradentials and navigate to home page. the user can logout the account as well.
+ 
+# what is slipped?
+  1- check on username whether or not the user name is unique.
+  2- forget password option.
+  3- the username is not show in home page when user login to website.
+ 
+# what is feedback does your group have on delivered work?
 
+ team is pretty satisfy with the performence as we are able to complete our work on time with github commits. we have to work hard to overcome our weak points for the next sprint.  
