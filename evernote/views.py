@@ -114,3 +114,30 @@ def delete_document(request, docid):
 
     return redirect('/editor')
 
+
+    
+def edit_username(request):
+    if request.method == 'POST':
+        username = request.user.username
+        newusername = request.POST['newusername']
+        newusername2 = request.POST['newusername2']
+        password = request.POST['newusername2']
+        if newusername != newusername2:
+            print("check1")
+            messages.info(request, 'Name doesnot match please check')
+            return render(request, 'editor.html')
+        elif User.objects.filter(username=newusername).exists():
+            messages.info(request, 'The username is not available')
+            return render(request, 'editor.html')
+        elif auth.authenticate(username=username, password=password) is None:
+            messages.info(request, 'The password doesnot match!')
+            return render(request, 'editor.html')
+        else:
+            user = User.objects.get(username= username)
+            user.username = newusername
+            print("okay")
+            user.save()
+            return redirect('editor/')
+
+    return render(request, 'edit_username.html')
+
