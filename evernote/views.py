@@ -1,4 +1,4 @@
- feature/user
+
 from contextlib import contextmanager
 from email import message
 from multiprocessing import context
@@ -8,8 +8,11 @@ from django.http import HttpResponse
 # Create your views here.
 from django.http import HttpResponse
 from django.contrib.auth.models import User, auth
-from evernote.models import  CountPage
+
+from evernote.models import  CountPage, Document
 from django.contrib import messages
+from django import forms
+from .forms import CreateNote
 
 def registerpage(request):
 
@@ -45,7 +48,8 @@ def loginpage(request):
 
          if user is not None:
              auth.login(request, user)
-             return redirect( 'home')
+
+             return redirect( 'editor')
          else :
              messages.info(request, 'invalid credentials') 
              return redirect( 'login')
@@ -64,4 +68,49 @@ def home(request):
 
 def logout(request):
     auth.logout(request)
-    return redirect('/')
+
+    return redirect('/login')
+
+def editor(request):
+    docid = int(request.GET.get('docid' , 0))
+    documents = Document.objects.all()
+    form = CreateNoteForm()
+
+    if request.method == 'POST':
+        docid = int(request.POST.get('docid', 0))
+        title = request.POST.get('title')
+        content = request.POST.get('content', '')
+
+        if docid > 0:
+            document = Document.objects.get(pk=docid)
+            document.title = title
+            document.content = content
+            document.save()
+
+            return redirect('/editor' )
+        else:
+            document = Document.objects.create(title=title, content=content)
+
+            return redirect('/?docid=%i' % document.id)
+
+    if docid > 0:
+        document = Document.objects.get(pk=docid)
+    else:
+        document = ''
+
+    context={
+        
+        'docid': docid,
+        'documents' : documents,
+        'document' : document,
+        'form' : form    }
+
+    return render(request, 'editor.html', context)
+
+    
+def delete_document(request, docid):
+    document = Document.objects.get(pk=docid)
+    document.delete()
+
+    return redirect('/editor')
+
