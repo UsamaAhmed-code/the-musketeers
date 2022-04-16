@@ -7,10 +7,12 @@ from django.http import HttpResponse
 # Create your views here.
 from django.http import HttpResponse
 from django.contrib.auth.models import User, auth
-from evernote.models import  CountPage, Document
+from evernote.models import  CountPage, Document, displayusername
 from django.contrib import messages
 from django import forms
 from .forms import CreateNoteForm
+from django.contrib.auth.models import User
+
 
 
 def registerpage(request):
@@ -94,9 +96,9 @@ def editor(request):
         document = Document.objects.get(pk=docid)
     else:
         document = ''
-
+    all_users = User.objects.values()
     context={
-        
+        'all_users': all_users,
         'docid': docid,
         'documents' : documents,
         'document' : document,
@@ -110,3 +112,33 @@ def delete_document(request, docid):
     document.delete()
 
     return redirect('/editor')
+
+def showusername(request):
+    displaynames=User.objects.all()
+    return render(request, 'editor.html', {"displayusername":displaynames})     
+
+
+def edit_username(request):
+    if request.method == 'POST':
+        username = request.user.username
+        newusername = request.POST['newusername']
+        newusername2 = request.POST['newusername2']
+        password = request.POST['newusername2']
+        if newusername != newusername2:
+            print("check1")
+            messages.info(request, 'Name doesnot match please check')
+            return render(request, 'editor.html')
+        elif User.objects.filter(username=newusername).exists():
+            messages.info(request, 'The username is not available')
+            return render(request, 'editor.html')
+        elif auth.authenticate(username=username, password=password) is None:
+            messages.info(request, 'The password doesnot match!')
+            return render(request, 'editor.html')
+        else:
+            user = User.objects.get(username= username)
+            user.username = newusername
+            print("okay")
+            user.save()
+            return redirect('editor/')
+
+    return render(request, 'edit_username.html')

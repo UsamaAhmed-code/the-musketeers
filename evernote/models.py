@@ -1,5 +1,6 @@
 import email
 from lzma import MODE_NORMAL
+from urllib import request
 from xml.dom.minidom import Document
 from django.db import models
 from ckeditor.fields import RichTextField
@@ -18,4 +19,7 @@ class Document(models.Model):
 
 class Meta:
     ordering = ('title', )    
+
+class displayusername(models.Model):
+    username= models.CharField(max_length=100) 
 
