@@ -1,5 +1,6 @@
 
 
+import email
 from msilib.schema import SelfReg
 from re import U
 from typing_extensions import Self
@@ -17,20 +18,24 @@ from django.contrib.auth import logout
 
 def registerpage(request):
 
+ 
    if request.method == 'POST':
-       username = request.POST['username']
-       email = request.POST['email']
-       psw1= request.POST['psw']
-       psw2= request.POST['psw-repeat']
+       username = request.POST.get('username')
+       email = request.POST.get('email')
+       psw1= request.POST.get('psw')
+       psw2= request.POST.get('psw-repeat')
      
        if psw1==psw2:
            if User.objects.filter(email=email).exists():
-               messages.info(request, 'Email already Taken')
+               messages.info(request, 'email already Taken')
                return render(request, 'register.html')
+           
            else:     
              user = User.objects.create_user(username=username, email=email, password=psw1)
              user.save();
-             return render(request, 'login.html')
+             messages.info(request, 'sign up successfully')
+             return render(request, 'register.html')
+           
              
        else :
              messages.info(request, 'password not match')
@@ -42,7 +47,7 @@ def registerpage(request):
 def loginpage(request):
 
      if request.method == 'POST' :
-         username = request.POST['username']
+         username = request.POST.get('username')
          password = request.POST['password']
          
          user = auth.authenticate(username=username, password=password)
@@ -56,8 +61,6 @@ def loginpage(request):
 
      else :  
         return render(request, 'login.html')
-
-
 
 def logout_view(request):
     logout(request)
@@ -89,7 +92,7 @@ def editor(request):
             
     
 
-            return redirect('/editor' )
+            return redirect('/editor/?docid='+str(docid) )
         else:
             document = Document.objects.create(title=title, content=content, author=author)
            
@@ -124,7 +127,7 @@ def delete_document(request, docid):
 
     
 
-@login_required    
+   
 def contactpage(request):
     if request.method=="POST":
         name=request.POST['name']
@@ -156,3 +159,29 @@ def edit_username(request):
             return redirect('/editor')
 
     return render(request, 'edit_username.html')
+
+from django.shortcuts import render
+from django.db.models import Q
+
+
+def searchposts(request):
+    if request.method == 'GET':
+        query= request.GET.get('q')
+
+        submitbutton= request.GET.get('submit')
+
+        if query is not None:
+            lookups= Q(title__icontains=query) | Q(content__icontains=query)
+
+            results= Document.objects.filter(lookups).distinct()
+
+            context={'results': results,
+                     'submitbutton': submitbutton}
+
+            return render(request, 'editor.html', context)
+
+        else:
+            return render(request, 'editor.html')
+
+    else:
+        return render(request, 'editor.html')

@@ -16,41 +16,85 @@
         
             h5{text-align: left}
             
+            .navbar-brand {
+  padding-left:30px;
+  padding-right:30px;
+}
+
         </style>
-    <div>
-        <nav style="background-color:rgb(137, 118, 202)">
-            <div class="navbar-brand">
-                <img src="{% static '/image/note-taking.png'  %}" width="150" length="280">  </div>
-             
-            <div style=" font-size: 25px; font-weight: bolder; ">DigitalDiary</div>
-         
-                <div class="navbar-end">
-        
-                    <a href="{% url 'editor' %}" class="navbar-item">Notes</a>
-                    <a href="{% url 'editor' %}?docid=0" class="navbar-item">New document</a>
-                    <a href="{% url 'contact' %}" class="navbar-item">Contact-Us</a>
-                    <h1>logged in as {{user.username}}</h1>
-                    <a href="{% url 'login' %}"  class="navbar-item">logout</a>
+   
+        <nav style="background-color:rgb(117, 229, 239)"  class="navbar-brand navbar-expand-lg navbar-light bg-light">
+          <div >
+            <img src="{% static '/image/ico.png'  %}" width="60" length="60" > 
+            <div style=" font-size: 12px; font-weight: bolder; ">DigitalDiary</div>   
+          
+          </div>
+              <div class="navbar-end">
+                  <ul class="navbar-brand">
+                    <li class="navbar-item">  
+                        <a href="{% url 'editor' %}" class="navbar-item">New Diary</a>
+                    </li>          
                     
-                </div>
+                    <li class="navbar-item">  
+                        <a href="{% url 'contact' %}" class="navbar-item">Contact Us</a>
+                    </li>     
+                   
+                       
+                    <li class="navbar-item">  
+                        <a href="{% url 'logout' %}" class="navbar-item">Logout</a>
+                    </li>     
+                  
+                        <li class="navbar-item">
+                        <h3>logged in as <b>{{user.username}}</b></h3> 
+                        
+                        <a href="{% url 'edit_username' %}" class="button is-primary">Edit Username</a>
+                        </li>
+                  </ul>   
+                
+          </div>
          </nav>        
-    </div>
+  
          
-     
+         <br/>
+         <form action=" " method="GET" value=" ">
+         Search <input type="text" name="q" value=" " placeholder="Search posts"/>
+         <input type="submit" name="submit" value="Search"/>
+         </form>
+         
+         
+         {% if submitbutton == 'Search' and request.GET.q != '' %}
+         {% if results %}
+         <h1>Results for <b>{{ request.GET.q }}</b></h1>
+         <br/><br/>
+         
+         {% for result in results %}
+         
+         {{result.title}}
+         <br/>
+         {% endfor %}
+         {% else %}
+         No search results for this query
+         {% endif %}
+         {% endif %}
 
         <section class="section">
             <div class="columns">
                 <div class="column is-2">
                     <aside class="menu">
-                        <p class="menu-label">Documents</p>
+                        <p class="menu-label"><b>Diaries</p></b>
 
                         <ul class="menu-list">
-                            {% for doc in documents %}
+                           
+                            {% for doc  in documents %}
                                 <li>
-                                    <a href="{% url 'editor' %}?docid={{ doc.id }}">{{ doc.title }}</a>
+                                    <a href="{% url 'editor' %}?docid={{ doc.id }}">
+                                        <h5><b> {{doc.title}}</h5></b> 
+                                        
+                                        </a>
+                                       
                                 </li>
                             {% endfor %}
-                        </ul>
+                        </ul> 
                     </aside>
                 </div>
                
@@ -62,6 +106,7 @@
                        
 
                         <input type="hidden" name="docid" value="{{ docid }}">
+                        
 
                         <div class="field">
                             <label class="label">
@@ -88,26 +133,32 @@
                                 <textarea class="textarea" name="content" placeholder="Content">{% if document %}{{ document.content }}{% endif %}</textarea>
                             </div>
                         </div>
-
-                        <div class="field is-grouped">
+                     
+                        <div class="field-is-grouped">
                             <div class="control">
                                 <button class="button is-primary">Save</button>
-                            </div>
+                            
                             {% if document %}
-                                <div class="control">
+                              
                                     <a href="{% url 'delete_document' document.id %}" class="button is-danger">Delete</a>
                                 </div>
                             {% endif %}
                         </div>
+                        
                     </form>
-
-                    <form>
-                        <form method="post" action=" ">
+                  
+                      <form>
+                     <form method="post" action=" ">
                             {% csrf_token %}
                             
                             {{form.media}}
+                        </form>
 
-                    </form>
+                          
+                      </form>
+
+
+                    
                 </div>
             </div>
         </section>
@@ -115,6 +166,7 @@
         <script>
             CKEDITOR.replace('content');
         </script>
+      
         
     </body>
 </html>
