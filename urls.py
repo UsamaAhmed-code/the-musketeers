@@ -13,3 +13,11 @@ urlpatterns = [
       
 ]
 
+htmx_urlpatterns = [
+
+
+   path("check_change/", views.check_change, name="check-change")
+
+]
+
+urlpatterns += htmx_urlpatterns
