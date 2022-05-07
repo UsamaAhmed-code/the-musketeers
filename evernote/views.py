@@ -1,9 +1,5 @@
 
-from cgitb import text
-import email
-from msilib.schema import SelfReg
-from pyexpat.errors import XML_ERROR_MISPLACED_XML_PI
-from re import U
+
 from typing_extensions import Self
 from xml.sax import xmlreader
 from django.http import HttpResponse
@@ -23,7 +19,9 @@ def registerpage(request):
 
  
    if request.method == 'POST':
-       username = request.POST['username']
+
+       username = request.POST.get('username')
+
        email = request.POST.get('email')
        psw1= request.POST.get('psw')
        psw2= request.POST.get('psw-repeat')
@@ -36,8 +34,12 @@ def registerpage(request):
            else:     
              user = User.objects.create_user(username=username, email=email, password=psw1)
              user.save();
+
             
              return redirect( 'login')
+
+            
+
            
              
        else :
@@ -50,7 +52,7 @@ def registerpage(request):
 def loginpage(request):
 
      if request.method == 'POST' :
-         username = request.POST['username']
+         username = request.POST.get('username')
          password = request.POST['password']
          
          user = auth.authenticate(username=username, password=password)
@@ -170,6 +172,7 @@ from django.db.models import Q
 
 
 def searchposts(request):
+
     if request.method == 'POST':
         query= request.POST.get('q')
 
@@ -178,7 +181,10 @@ def searchposts(request):
         if query is not None:
             lookups= Q(title__icontains=query) | Q(content__icontains=query)
 
+
             results= Document.objects.filter(lookups)
+
+           
 
             context={'results': results,
                      'submitbutton': submitbutton}
@@ -207,3 +213,4 @@ def check_change(request):
         document = Document.objects.create(title=title, content=content,)
 
         return HttpResponse("Not Saved")
+           
