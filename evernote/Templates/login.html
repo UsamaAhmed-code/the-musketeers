@@ -14,19 +14,36 @@
 <body>
     {% load static %}
     <div class="login-container">
-        <img src="{% static '/image/note-taking.png'  %}" alt="Evernote logo" style="margin: 10px 0px 16px 220px; width: 140px;">
+        <img src="{% static '/image/ico.png'  %}" alt="Evernote logo" style="margin: 10px 0px 16px 220px; width: 140px;">
         <div style=" font-size: 30px; font-weight: bolder; text-align: center;">DigitalDiary</div>
         <span style="margin: 10px 5px 10px 15px; display: block; font-size: 16px; text-align: center;">Remember everything important.</span>
-        {% include 'message.html' %}
+       
+            {% for message in messages %}
+            <div class="alert">
+              <span class="closebtn">&times;</span> 
+              <strong>{{ message }}</strong>  
+            </div>
+
+                 
+                
+              
+              {% endfor %}  
+               
+              {% for msg in messages %}
+              <div class="alertsuccess">
+                <span class="closebtn">&times;</span>  
+                <strong>{{msg}}</strong> 
+              </div>         
+              {% endfor %}   
         <form action="" method="post">
             {% csrf_token %}
             <input id="username" class="inputs" name="username" type="text" placeholder="Enter the username" >
-            <input id="pass" class="inputs" name="password" type="password" placeholder="Enter the password" pattern=".{8,}" title="Password should contain 8 or more character!">
-            <input id="btn" type="submit" value="login">
+            <input id="pass" class="inputs" name="password" type="password" placeholder="Enter the password"  title="Password should contain 8 or more character!">
+            <input id="btn" type="submit" value="Login">
         
            
         </form>
-       <p> To create Account click on <a href="{% url 'register'%}">Sign up </a></p>
+       <p> To create account click on <a href="{% url 'register'%}">Sign up </a></p>
         <div style="font-size: 12px; margin: 15px 0px 0px 20px; text-align: center;">By creating an account, you are agreeing to our </br><a href="https://evernote.com/tos" style="color: #223fe7;" target="_blank">Terms of Service</a> and <a href="https://evernote.com/privacy" target="_blank" style="color: #00a82d;">Privacy Policy</a>.</div>
     </div>
 </body>
@@ -40,11 +57,12 @@
         overflow: hidden;
     }
     
+    
     .login-container {
-        background-color: rgb(50, 202, 215);
+        background-color: rgb(117, 229, 239);
         position: relative;
         margin: 100px 430px;
-        height: 500px;
+        height: 550px;
         border-radius: 5px;
         box-shadow: 1px 1px 20px 0px rgba(5, 171, 226, 0.53);
         border: 1px dashed #0b2225;
@@ -83,13 +101,53 @@
         border-color: #197dc5;
     }
     
-    .login-container .errormsg {
-        color: rgb(255, 37, 37);
-        float: left;
-        padding-left: 60px;
-        font-size: 12px;
-    }
+  
 #divider{
 margin:92px 0px 0px 109px;
 }
+
+.alert {
+  padding: 10px;
+ 
+  background-color: #f44336;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+.alertsuccess {
+  padding: 10px;
+ 
+  background-color: #04AA6D;
+  color: white;
+  opacity: 1;
+  transition: opacity 0.6s;
+  margin-bottom: 15px;
+}
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
 </style>
+<script>
+    var close = document.getElementsByClassName("closebtn");
+    var i;
+    
+    for (i = 0; i < close.length; i++) {
+      close[i].onclick = function(){
+        var div = this.parentElement;
+        div.style.opacity = "0";
+        setTimeout(function(){ div.style.display = "none"; }, 600);
+      }
+    }
+    </script>
