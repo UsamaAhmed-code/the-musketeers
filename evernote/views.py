@@ -141,3 +141,35 @@ def edit_username(request):
 
     return render(request, 'edit_username.html')
 
+
+def edit_password(request):
+    if request.method == 'POST':
+        username = request.user.username
+        #userpassword = request.user.password
+        user = User.objects.get(username= username)
+        oldpassword = request.POST['oldpassword']
+        newpassword1 = request.POST['newpassword1']
+        newpassword2 = request.POST['newpassword2']
+        
+
+        if user.check_password(oldpassword) != True:
+            messages.info(request, 'The password is wrong!. Please check again')
+            return render(request, 'edit_password.html')
+        elif newpassword1 != newpassword2:
+            print("check1")
+            messages.info(request, 'New passwords donot match please check')
+            return render(request, 'edit_password.html')
+        elif user.check_password(newpassword1) == True:
+            messages.info(request, 'Please use new password for the login.')
+            return render(request, 'edit_password.html')
+        
+        else:
+
+            
+            user.set_password(newpassword1)
+            print("okay")
+            user.save()
+            return redirect('/editor/')
+
+    return render(request, 'edit_password.html')
+
