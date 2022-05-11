@@ -9,10 +9,20 @@ from django.http import HttpResponse
 from django.http import HttpResponse
 from django.contrib.auth.models import User, auth
 
+from evernote.models import  CountPage, Document, displayusername
+from django.contrib import messages
+from django import forms
+from .forms import CreateNoteForm
+from django.contrib.auth.models import User
+
+
+
+
 from evernote.models import  CountPage, Document
 from django.contrib import messages
 from django import forms
 from .forms import CreateNote
+
 
 def registerpage(request):
 
@@ -97,9 +107,9 @@ def editor(request):
         document = Document.objects.get(pk=docid)
     else:
         document = ''
-
+    all_users = User.objects.values()
     context={
-        
+        'all_users': all_users,
         'docid': docid,
         'documents' : documents,
         'document' : document,
@@ -113,6 +123,11 @@ def delete_document(request, docid):
     document.delete()
 
     return redirect('/editor')
+
+
+def showusername(request):
+    displaynames=User.objects.all()
+    return render(request, 'editor.html', {"displayusername":displaynames})     
 
 
     
@@ -141,6 +156,8 @@ def edit_username(request):
 
     return render(request, 'edit_username.html')
 
+    return render(request, 'edit_username.html')
+
 def favor(request):
     docid = int(request.POST['docid'])
     document = Document.objects.get(pk=docid)
@@ -151,4 +168,3 @@ def favor(request):
     document.save()
     #return redirect('/editor')
     return render(request, 'editor.html')
-
