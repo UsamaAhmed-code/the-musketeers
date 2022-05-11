@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="Shortcut Icon" href="https://www.evernote.com/favicon.ico?v2" type="image/x-icon" />
+    <title>Evernote-Login</title>
+</head>
+
+<body>
+    {% load static %}
+    <div class="background"></div>
+    <div class="login-container">
+        <img src="{% static '/image/Evernotelogo.png'  %}" alt="Evernote logo" style="margin: 10px 0px 16px 110px; width: 40px;">
+        <div style=" font-size: 30px; font-weight: bolder; text-align: center;">Evernote</div>
+        <span style="margin: 10px 5px 10px 15px; display: block; font-size: 16px; text-align: center;">Remember everything important.</span>
+    
+        <form action="" method="post">
+            {% csrf_token %}
+            <input id="username" class="inputs" name="username" type="text" placeholder="Enter the username" >
+            <input id="pass" class="inputs" name="password" type="password" placeholder="Enter the password" pattern=".{8,}" title="Password should contain 8 or more character!">
+            <input id="btn" type="submit" value="Login">
+
+            <input type="checkbox" checked="checked"> Remember me
+        
+           
+        </form>
+        <div style="font-size: 12px; margin: 15px 0px 0px 20px; text-align: center;">By creating an account, you are agreeing to our </br><a href="https://evernote.com/tos" style="color: #00a82d;" target="_blank">Terms of Service</a> and <a href="https://evernote.com/privacy" target="_blank" style="color: #00a82d;">Privacy Policy</a>.</div>
+    </div>
+</body>
+<style>
+    p{text-align: center}
+    html,
+    body {
+        margin: 0;
+        height: 100%;
+        background: url(https://www.evernote.com/static/static_css_resources/bb6ce0ce7affff91989d4aab2ba9fa53.png);
+        overflow: hidden;
+    }
+    
+    .login-container {
+        background-color: rgb(255, 255, 255);
+        position: relative;
+        margin: 100px 430px;
+        height: 500px;
+        border-radius: 5px;
+        box-shadow: 1px 1px 20px 0px rgb(46 255 121 / 53%);
+        border: 1px dashed #5ba525;
+        padding: 20px 50px;
+    }
+    
+    .login-container .inputs {
+        width: 70%;
+        height: 35px;
+        border-radius: 7px;
+        outline: none;
+        margin: 4px 14px 14px 60px;
+        display: inline-block;
+        border-radius: 5px;
+        border: 1px solid #5ba525;
+        padding-left: 10px;
+    }
+    
+    .login-container .inputs:focus {
+        border: 1px solid #5ba525;
+        box-shadow: 1px 1px 20px 0px rgb(46 255 121 / 53%);
+    }
+    
+    .login-container #btn {
+        width: 50%;
+        height: 40px;
+        border-radius: 5px;
+        outline: none;
+        margin: 4px 24px 0px 100px;
+        color: white;
+        cursor: pointer;
+        background-color: #00a82d;
+        border: none;
+    }
+    
+    .login-container #btn:hover {
+        background-color: #008f26;
+        border-color: #008f26;
+        opacity:0.8;
+    }
+    
+    .login-container .errormsg {
+        color: rgb(255, 37, 37);
+        float: left;
+        padding-left: 60px;
+        font-size: 12px;
+    }
+#divider{
+margin:92px 0px 0px 109px;
+}
+
+</style>
