@@ -15,6 +15,7 @@ class Document(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+    favorites = models.BooleanField(default = False)
 
 
 class Meta:
