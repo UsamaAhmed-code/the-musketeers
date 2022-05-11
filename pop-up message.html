@@ -1,5 +1,24 @@
-<!DOCTYPE html> {% load static %} {% load crispy_forms_tags %}
+[11:53 am, 22/04/2022] Mounika Ragupathy: <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <div id="wrapper">
+      <div id="button">
+	   <button id="add-btn" style="visibility hidden"></button>
+            <span><input id="searchBox" type="text" placeholder="Search Notes" onkeyup="search()"></span>
+      </div>
+      <div id="note-editor">
+        <input itemid="title" style="float: right;" type="text" id="title" name="title" placeholder="Enter Notes Title"/>
+        <div id="error"></div…
+[11:53 am, 22/04/2022] Mounika Ragupathy: <!DOCTYPE html> {% load static %} {% load crispy_forms_tags %}
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,12 +37,13 @@
             <img src="{% static '/image/Evernotelogo.png'  %}" width="60" length="100">
         </div>
 
+
         <div class="navbar-menu">
         </div>
         <div>
             <h1>EVERNOTE</h1>
         </div>
-        
+        </div>
         <div class="navbar-end">
 
             <a href="{% url 'editor' %}" class="navbar-item">Notes</a>
@@ -31,7 +51,7 @@
             <h1>logged in as {{user.username}}</h1>
             <a class="navbar-item">logout</a>
         </div>
-        
+        </div>
     </nav>
 
     <section class="section">
@@ -91,7 +111,9 @@
                         </div>
                         {% if document %}
                         <div class="control">
-                            <a href="{% url 'delete_document' document.id %}" class="button is-danger">Delete</a>
+
+                        <button onclick="return confirm('Are you sure you want to Delete?');" 
+                         id="btnDelete" class="button is-danger">DELETE</button> 
                         </div>
                         {% endif %}
                     </div>
@@ -101,10 +123,6 @@
                     <form method="post" action=" ">
                         {% csrf_token %} {{form.media}}
                     </form>
-                    <form>
-                        customKeyPrefix: ’, timeout: 0, onSave: function() {}, onRestore: function() {}, onRelease: function() {}
-                    </form>
-                </form>
             </div>
         </div>
     </section>
@@ -117,7 +135,9 @@
             document.getElementById('add-btn').click();
         }
     </script>
-   
-  </body>
-    
+
+
+
+</body>
+
 </html>

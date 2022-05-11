@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 {% load static %}
 {% load crispy_forms_tags %}
@@ -7,14 +5,17 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Notes</title>
+      
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
         <script src="https://unpkg.com/htmx.org@1.7.0" integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo" crossorigin="anonymous" defer></script>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     </head>
 
     <body>
         <style>
-           
+        
             h5{text-align: left}
             .box {
   width: 40%;
@@ -76,59 +77,149 @@
   overflow: auto;
 }
             
-        </style>
-        <nav style="background-color:rgb(120, 225, 102)">
-            <div class="navbar-brand">
-                <img src="{% static '/image/Evernotelogo.png'  %}" width="60" length="100">
-            </div>
-             
+            .navbar-brand {
+  padding-left:30px;
+  padding-right:10px;
 
-            <div class="navbar-menu">
-            </div>
-            <div> <h1>EVERNOTE</h1>
-            </div>
-         </div>
-                <div class="navbar-end">
-        
-                    <a href="{% url 'editor' %}" class="navbar-item">Notes</a>
-                    <a href="{% url 'editor' %}?docid=0" class="navbar-item">New document</a>
-                    <h1>logged in as {{user.username}}</h1>
-                    <a class="navbar-item">logout</a>
-                </div>
-            </div>
-        </nav>
+}
+.divScroll {
+overflow:scroll;
+height:500px;
+
+}
+.divScroll{
+
+Overflow-y:scroll;
+}
+
+        </style>
+   
+        <nav style="background-color:rgb(117, 229, 239)"  class="navbar-brand navbar-expand-lg navbar-light bg-light">
+          <div >
+            <img src="{% static '/image/ico.png'  %}" width="60" length="60" > 
+            <div style=" font-size: 12px; font-weight: bolder; ">DigitalDiary</div>   
+          
+          </div>
+              <div class="navbar-end">
+                  <ul class="navbar-brand">
+                    <li class="navbar-item">  
+                        <a href="{% url 'editor' %}" class="button is-primary">
+                            +New Diary
+                        </a>
+                    </li>          
+                    
+                    <li class="navbar-item">  
+                        <a href="{% url 'contact' %}" class="navbar-item">Contact Us</a>
+                    </li>     
+                   
+                       
+                    <li class="navbar-item">  
+                        <a href="{% url 'logout' %}" class="navbar-item">Logout</a>
+                    </li>     
+                  
+                        <li class="navbar-item">
+                        <h3>logged in as <b>{{user.username}}</b></h3> </li>
+                        <li class="navbar-item">
+                        <a href="{% url 'edit_username' %}" class="button is-primary">Edit Username</a>
+                        <a href="{% url 'edit_password' %}" class="button is-primary">Edit Password</a>
+                        </li>
+                  </ul>   
+                
+          </div>
+         </nav>        
+  
+         
+         <br/>
+
+         <form action="{% url 'search' %} " method="POST" value="{{request.POST.q}} ">
+             {% csrf_token %}
+         Search <input type="text" name="q" value=" {{request.POST.q}}" placeholder="Search posts"/>
+         <input class="button is-primary" type="submit" name="submit" value="Search"/>
+         </form>
 
         <section class="section">
             <div class="columns">
                 <div class="column is-2">
                     <aside class="menu">
-                        <p class="menu-label">Documents</p>
-
+                        <p class="menu-label"><b>Diaries</p></b>
+                        <div class="divScroll">
+                            <p class="menu-label"><b>Favorites</p></b>
                         <ul class="menu-list">
-                            {% for doc in documents %}
+                           
+                            {% for fav  in favorites %}
                                 <li>
-                                    <a href="{% url 'editor' %}?docid={{ doc.id }}">{{ doc.title }}</a>
+                                    
+                                    <a href="{% url 'editor' %}?docid={{ doc.id }}">
+                                        <li>
+                                        <h5><b> {{fav.title}}</h5>{% csrf_token %}<i class="fa fa-star-o" aria-hidden="{{fav.favorites}}" hx-post="{% url 'favorites' %}" hx-include="[name='docid']" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'></i> </b>
+                                        <span >
+                                             {{ fav.created_at|date:"m/d/Y" }} 
+                                           
+                                        </span>
+                                        </li>
+                                        </a>
+                                       
+                                      
+                                              
+                                           
+                                       
+                                       
                                 </li>
                             {% endfor %}
                         </ul>
+                            <p class="menu-label"><b>Notes</p></b>
+                        <ul class="menu-list">
+                           
+          
+                            {% for doc  in documents %}
+                                <li>
+                                    
+                                    <a href="{% url 'editor' %}?docid={{ doc.id }}">
+                                        <li>
+                                        <h5><b> {{doc.title}}</h5><i id="id"class="fa fa-star-o" aria-hidden="{{fav.favorites}}" hx-post="{% url 'favorites' %}" hx-include="[name='docid']" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'></i> </b>
+                                        <span >
+                                             {{ doc.created_at|date:"m/d/Y" }} 
+                                           
+                                        </span>
+                                        </li>
+                                        </a>
+                                       
+                                      
+                                              
+                                           
+                                       
+                                       
+                                </li>
+                            {% endfor %}
+
+                        </ul>  
                     </aside>
                 </div>
-
-
+               
+              
                 <div class="column is-10">
+
+                    <a href="{% url 'editor' %}" class="button is-primary">
+                        +New Diary
+                    </a>
+                    <form method="post" action="{% url 'editor' %}">
+
                     <form method="post" action="{% url 'editor' %}" hx-trigger="change" hx-post="/check_change/" hx-target = "#checksave2">
-                        {% csrf_token %}
+                       {% csrf_token %}
                     
                        
 
                         <input type="hidden" name="docid" value="{{ docid }}">
+
 
                         <div>
                         <h3>
                             <b>{{user.username}}</b> 
                         </h3>
                         <a href="{% url 'edit_username' %}" class="button is-danger">Edit Username</a>
+                        <a href="{% url 'edit_password' %}" class="button is-primary">Edit Password</a>
                         </div>
+
 
                         <div class="field">
                             <label class="label">
@@ -155,14 +246,14 @@
                                 <textarea class="textarea" name="content" placeholder="Content">{% if document %}{{ document.content }}{% endif %}</textarea>
                             </div>
                         </div>
-
-                        <div class="field is-grouped">
+                     
+                        <div class="field-is-grouped">
                             <div class="control">
                                 <button class="button is-primary">Save</button>
-                            </div>
+                            
                             {% if document %}
-                                <div class="control">
-                                    <a href="{% url 'delete_document' document.id %}" class="button is-danger">Delete</a>
+                              
+                                    <a href="{% url 'delete_document' document.id %}" onclick="return confirm('Are you sure you want to delete this?')" class="button is-danger">Delete</a>
                                 </div>
                             <div class="control">
                                     <a href="#popup1" class="button is-secondary">View</a>
@@ -178,15 +269,21 @@
 </div>
                             {% endif %}
                         </div>
+                        
                     </form>
-
-                    <form>
-                        <form method="post" action=" ">
+                  
+                      <form>
+                     <form method="post" action=" ">
                             {% csrf_token %}
                             
                             {{form.media}}
+                        </form>
 
-                    </form>
+                          
+                      </form>
+
+
+                    
                 </div>
             </div>
         </section>
@@ -194,6 +291,7 @@
         <script>
             CKEDITOR.replace('content');
         </script>
+      
         
     </body>
 </html>
