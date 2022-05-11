@@ -1,0 +1,172 @@
+
+
+<!DOCTYPE html>
+{% load static %}
+{% load crispy_forms_tags %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Notes</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    </head>
+
+    <body>
+        <style>
+        
+            h5{text-align: left}
+            
+            .navbar-brand {
+  padding-left:30px;
+  padding-right:30px;
+}
+
+        </style>
+   
+        <nav style="background-color:rgb(117, 229, 239)"  class="navbar-brand navbar-expand-lg navbar-light bg-light">
+          <div >
+            <img src="{% static '/image/ico.png'  %}" width="60" length="60" > 
+            <div style=" font-size: 12px; font-weight: bolder; ">DigitalDiary</div>   
+          
+          </div>
+              <div class="navbar-end">
+                  <ul class="navbar-brand">
+                    <li class="navbar-item">  
+                        <a href="{% url 'editor' %}" class="navbar-item">New Diary</a>
+                    </li>          
+                    
+                    <li class="navbar-item">  
+                        <a href="{% url 'contact' %}" class="navbar-item">Contact Us</a>
+                    </li>     
+                   
+                       
+                    <li class="navbar-item">  
+                        <a href="{% url 'logout' %}" class="navbar-item">Logout</a>
+                    </li>     
+                  
+                        <li class="navbar-item">
+                        <h3>logged in as <b>{{user.username}}</b></h3> 
+                        
+                        <a href="{% url 'edit_username' %}" class="button is-primary">Edit Username</a>
+                        </li>
+                  </ul>   
+                
+          </div>
+         </nav>        
+  
+         
+         <br/>
+         <form action=" " method="GET" value=" ">
+         Search <input type="text" name="q" value=" " placeholder="Search posts"/>
+         <input type="submit" name="submit" value="Search"/>
+         </form>
+         
+         
+         {% if submitbutton == 'Search' and request.GET.q != '' %}
+         {% if results %}
+         <h1>Results for <b>{{ request.GET.q }}</b></h1>
+         <br/><br/>
+         
+         {% for result in results %}
+         
+         {{result.title}}
+         <br/>
+         {% endfor %}
+         {% else %}
+         No search results for this query
+         {% endif %}
+         {% endif %}
+
+        <section class="section">
+            <div class="columns">
+                <div class="column is-2">
+                    <aside class="menu">
+                        <p class="menu-label"><b>Diaries</p></b>
+
+                        <ul class="menu-list">
+                           
+                            {% for doc  in documents %}
+                                <li>
+                                    <a href="{% url 'editor' %}?docid={{ doc.id }}">
+                                        <h5><b> {{doc.title}}</h5></b> 
+                                        
+                                        </a>
+                                       
+                                </li>
+                            {% endfor %}
+                        </ul> 
+                    </aside>
+                </div>
+               
+              
+                <div class="column is-10">
+                    <form method="post" action="{% url 'editor' %}">
+                        {% csrf_token %}
+                    
+                       
+
+                        <input type="hidden" name="docid" value="{{ docid }}">
+                        
+
+                        <div class="field">
+                            <label class="label">
+                                Title
+
+                                {% if document %}
+                                    <span class="has-text-grey-light">
+                                        Created at: {{ document.created_at|date:"m/d Y" }} / 
+                                        Modified at: {{ document.modified_at|date:"m/d Y" }}
+                                    </span>
+                                {% endif %}
+                            </label>
+
+                            <div class="control">
+                                <input type="text" class="input" name="title" placeholder="Title"{% if document %} value="{{ document.title }}"{% endif %}>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Content</label>
+                    
+                            <div class="control">
+                         
+                                <textarea class="textarea" name="content" placeholder="Content">{% if document %}{{ document.content }}{% endif %}</textarea>
+                            </div>
+                        </div>
+                     
+                        <div class="field-is-grouped">
+                            <div class="control">
+                                <button class="button is-primary">Save</button>
+                            
+                            {% if document %}
+                              
+                                    <a href="{% url 'delete_document' document.id %}" class="button is-danger">Delete</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                    </form>
+                  
+                      <form>
+                     <form method="post" action=" ">
+                            {% csrf_token %}
+                            
+                            {{form.media}}
+                        </form>
+
+                          
+                      </form>
+
+
+                    
+                </div>
+            </div>
+        </section>
+        <script src="C:\Users\usama\SDPproject\evernote\Templates\ckeditor/ckeditor.js" ></script>
+        <script>
+            CKEDITOR.replace('content');
+        </script>
+      
+        
+    </body>
+</html>
