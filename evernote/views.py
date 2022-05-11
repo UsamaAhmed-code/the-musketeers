@@ -1,15 +1,20 @@
 
 
+from email.message import EmailMessage
+from multiprocessing import context
+from pickle import FALSE
+from telnetlib import DO
 from typing_extensions import Self
 from xml.sax import xmlreader
-from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user
 from django.contrib.auth.models import User, auth
+from SDPproject.settings import EMAIL_HOST_USER
 from evernote.models import   Document, Contact
 from django.contrib import messages
-from .forms import CreateNoteForm
+from .forms import CreateNoteForm, Share_the_PostForm
 from django.contrib.auth import logout
 
 
@@ -44,7 +49,11 @@ def registerpage(request):
              
        else :
              messages.info(request, 'password not match')
-             return render(request, 'register.html')
+             context={
+                      'username' : username,
+                      'email' : email,
+             }
+             return render(request, 'register.html', context)
    else:   
     return render(request, 'register.html')
 
@@ -81,10 +90,8 @@ def editor(request):
     username = request.user.username
     user = User.objects.get(username = username)
     author = user
-    
-    
-
    
+    
     if request.method == 'POST':
      
       
@@ -98,14 +105,16 @@ def editor(request):
             document.title = title
             document.content = content
             document.save()
-            
-    
 
             return redirect('/editor/?docid='+str(docid) )
         else:
-            document = Document.objects.create(title=title, content=content, author=author, )
-           
-            return redirect('/editor' )
+            if Document.objects.filter(title=title).exists():
+               messages.info(request, 'title already Taken')
+               return redirect('/editor/?docid='+str(docid) )
+              
+            else:
+                 document = Document.objects.create(title=title, content=content, author=author )
+                 return redirect('/editor' )
 
     if docid > 0:
         document = Document.objects.get(pk=docid)
@@ -178,6 +187,9 @@ def searchposts(request):
 
         submitbutton= request.POST.get('submit')
 
+        if query is None:
+          return render(request, 'editor.html')
+
         if query is not None:
             lookups= Q(title__icontains=query) | Q(content__icontains=query)
 
@@ -214,3 +226,38 @@ def check_change(request):
 
         return HttpResponse("Not Saved")
            
+from django.core.mail import EmailMultiAlternatives
+from SDPproject.settings import EMAIL_HOST_USER
+
+
+
+
+def send_mail_plain_with_file(request):
+    message = request.POST.get('message', '')
+    subject = request.POST.get('subject', '')
+    mail_id = request.POST.get('email', '')
+    email = EmailMultiAlternatives(subject, message, EMAIL_HOST_USER, [mail_id])
+    email.content_subtype = 'html'
+
+    file = request.FILES['file']
+    email.attach(file.name, file.read(), file.content_type)
+
+    email.send()
+    messages.info(request, 'Email send Successfully')
+    return render(request, 'email.html')    
+
+def email(request):
+   
+    return render(request, 'email.html')    
+
+def favor(request):
+    docid = int(request.POST['docid'])
+    document = Document.objects.get(pk=docid)
+    if document.favorites == True:
+        document.favorites = False
+    else:
+        document.favorites = True
+    document.save()
+    #return redirect('/editor')
+    return render(request, 'editor.html')
+
