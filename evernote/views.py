@@ -1,5 +1,6 @@
 
 
+
 import email
 from msilib.schema import SelfReg
 from re import U
@@ -36,6 +37,7 @@ def registerpage(request):
              messages.info(request, 'sign up successfully')
              return render(request, 'register.html')
            
+
              
        else :
              messages.info(request, 'password not match')
@@ -47,20 +49,25 @@ def registerpage(request):
 def loginpage(request):
 
      if request.method == 'POST' :
+
          username = request.POST.get('username')
+
          password = request.POST['password']
          
          user = auth.authenticate(username=username, password=password)
 
          if user is not None:
              auth.login(request, user)
+
              return redirect( '/editor')
+
          else :
              messages.info(request, 'invalid credentials') 
              return redirect( 'login')
 
      else :  
         return render(request, 'login.html')
+
 
 def logout_view(request):
     logout(request)
@@ -80,6 +87,7 @@ def editor(request):
     if request.method == 'POST':
      
       
+
         docid = int(request.POST.get('docid', 0))
         title = request.POST.get('title')
         content = request.POST.get('content', '')
@@ -89,6 +97,7 @@ def editor(request):
             document.title = title
             document.content = content
             document.save()
+
             
     
 
@@ -97,6 +106,7 @@ def editor(request):
             document = Document.objects.create(title=title, content=content, author=author)
            
             return redirect('/editor' )
+
 
     if docid > 0:
         document = Document.objects.get(pk=docid)
@@ -108,22 +118,24 @@ def editor(request):
         'docid': docid,
         'documents' : documents,
         'document' : document,
+
         'author' : author,
         'form' : form, 
        
        
          }
 
+
     return render(request, 'editor.html', context)
 
     
 
-    
 def delete_document(request, docid):
     document = Document.objects.get(pk=docid)
     document.delete()
 
     return redirect('/editor')
+
 
     
 
@@ -137,6 +149,7 @@ def contactpage(request):
         contact.save()
     return render(request, "contact.html")    
 
+
 def edit_username(request):
     if request.method == 'POST':
         username = request.user.username
@@ -146,16 +159,19 @@ def edit_username(request):
         if newusername != newusername2:
             print("check1")
             messages.info(request, 'Name doesnot match please check')
+
             return render(request, 'edit_username.html')
         elif User.objects.filter(username=newusername).exists():
             messages.info(request, 'The username is not available')
             return render(request, 'edit_username.html')
         
+
         else:
             user = User.objects.get(username= username)
             user.username = newusername
             print("okay")
             user.save()
+
             return redirect('/editor')
 
     return render(request, 'edit_username.html')
@@ -185,3 +201,4 @@ def searchposts(request):
 
     else:
         return render(request, 'editor.html')
+
