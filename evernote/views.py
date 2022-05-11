@@ -4,8 +4,6 @@
 from email.message import EmailMessage
 from multiprocessing import context
 from pickle import FALSE
-from telnetlib import DO
-
 from typing_extensions import Self
 from xml.sax import xmlreader
 from django.http import HttpResponse, HttpResponseRedirect
@@ -15,9 +13,21 @@ from django.contrib.auth import get_user
 from django.contrib.auth.models import User, auth
 from SDPproject.settings import EMAIL_HOST_USER
 from evernote.models import   Document, Contact
+
+from evernote.models import  CountPage, Document, displayusername
+from django.contrib import messages
+from django import forms
+from .forms import CreateNoteForm
+from django.contrib.auth.models import User
+
+
+
+
+from evernote.models import  CountPage, Document
 from django.contrib import messages
 from .forms import CreateNoteForm, Share_the_PostForm
 from django.contrib.auth import logout
+
 
 
 
@@ -144,9 +154,9 @@ def editor(request):
         document = Document.objects.get(pk=docid)
     else:
         document = ''
-
+    all_users = User.objects.values()
     context={
-        
+        'all_users': all_users,
         'docid': docid,
         'documents' : documents,
         'document' : document,
@@ -165,6 +175,11 @@ def delete_document(request, docid):
     document.delete()
 
     return redirect('/editor')
+
+
+def showusername(request):
+    displaynames=User.objects.all()
+    return render(request, 'editor.html', {"displayusername":displaynames})     
 
 
     
@@ -205,6 +220,7 @@ def edit_username(request):
             return redirect('/editor')
 
     return render(request, 'edit_username.html')
+
 
 
 
@@ -279,6 +295,7 @@ def searchposts(request):
         return render(request, 'editor.html')
 
 
+
 def check_change(request):
 
     docid = int(request.POST.get('docid', 0))
@@ -320,6 +337,14 @@ def email(request):
    
     return render(request, 'email.html')    
 
+        document = Document.objects.create(title=title, content=content, author=author)
+           
+        return HttpResponse("Not Saved")
+
+    return render(request, 'edit_username.html')
+
+
+
 def favor(request):
     docid = int(request.POST['docid'])
     document = Document.objects.get(pk=docid)
@@ -330,5 +355,4 @@ def favor(request):
     document.save()
     #return redirect('/editor')
     return render(request, 'editor.html')
-
 

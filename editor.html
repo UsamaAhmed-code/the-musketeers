@@ -8,13 +8,74 @@
       
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
         <script src="https://unpkg.com/htmx.org@1.7.0" integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo" crossorigin="anonymous" defer></script>
+
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     </head>
 
     <body>
         <style>
         
             h5{text-align: left}
+            .box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h2 {
+  margin-top: 0;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
             
             .navbar-brand {
   padding-left:30px;
@@ -137,11 +198,14 @@ Overflow-y:scroll;
                
               
                 <div class="column is-10">
+
                     <a href="{% url 'editor' %}" class="button is-primary">
                         +New Diary
                     </a>
                     <form method="post" action="{% url 'editor' %}">
-                        {% csrf_token %}
+
+                    <form method="post" action="{% url 'editor' %}" hx-trigger="change" hx-post="/check_change/" hx-target = "#checksave2">
+                       {% csrf_token %}
                     
                        
 
@@ -165,7 +229,7 @@ Overflow-y:scroll;
                                     <span class="has-text-grey-light">
                                         Created at: {{ document.created_at|date:"m/d Y" }} / 
                                         Modified at: {{ document.modified_at|date:"m/d Y" }}
-                                    </span>
+                                    </span><i id = "checksave">Not Saved </i>
                                 {% endif %}
                             </label>
 
@@ -191,6 +255,18 @@ Overflow-y:scroll;
                               
                                     <a href="{% url 'delete_document' document.id %}" onclick="return confirm('Are you sure you want to delete this?')" class="button is-danger">Delete</a>
                                 </div>
+                            <div class="control">
+                                    <a href="#popup1" class="button is-secondary">View</a>
+                                </div>
+                                <div id="popup1" class="overlay">
+    <div class="popup">
+        <h2>{{ document.title }}</h2>
+        <a class="close" href="#">&times;</a>
+        <div class="content">
+            {{ document.content }}
+        </div>
+    </div>
+</div>
                             {% endif %}
                         </div>
                         

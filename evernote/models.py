@@ -7,8 +7,6 @@ from email import message
 from lzma import MODE_NORMAL
 from urllib import request
 
-
-
 from xml.dom.minidom import Document
 
 from django.db import models
@@ -32,6 +30,9 @@ class Document(models.Model):
 
 class Meta:
     ordering = ('title', )    
+
+class displayusername(models.Model):
+    username= models.CharField(max_length=100) 
 
 
 class Contact(models.Model):
