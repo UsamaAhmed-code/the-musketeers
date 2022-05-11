@@ -146,7 +146,16 @@ Overflow-y:scroll;
                        
 
                         <input type="hidden" name="docid" value="{{ docid }}">
-                        
+
+
+                        <div>
+                        <h3>
+                            <b>{{user.username}}</b> 
+                        </h3>
+                        <a href="{% url 'edit_username' %}" class="button is-danger">Edit Username</a>
+                        <a href="{% url 'edit_password' %}" class="button is-primary">Edit Password</a>
+                        </div>
+
 
                         <div class="field">
                             <label class="label">
