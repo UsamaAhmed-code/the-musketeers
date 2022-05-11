@@ -142,6 +142,7 @@ def edit_username(request):
     return render(request, 'edit_username.html')
 
 
+
 def check_change(request):
 
     docid = int(request.POST.get('docid', 0))
@@ -158,3 +159,15 @@ def check_change(request):
         document = Document.objects.create(title=title, content=content, author=author)
            
         return HttpResponse("Not Saved")
+
+def favor(request):
+    docid = int(request.POST['docid'])
+    document = Document.objects.get(pk=docid)
+    if document.favorites == True:
+        document.favorites = False
+    else:
+        document.favorites = True
+    document.save()
+    #return redirect('/editor')
+    return render(request, 'editor.html')
+

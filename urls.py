@@ -9,6 +9,7 @@ urlpatterns = [
     path('editor/', views.editor, name= "editor"),
      path('delete_document/<int:docid>/', views.delete_document , name='delete_document'),
    path('edit_username/', views.edit_username , name='edit_username'),
+      path('favor/', views.favor, name= "favorites"),
      path('editor/', views.showusername, name= "editor"),
       
 ]
