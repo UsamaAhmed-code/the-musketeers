@@ -141,3 +141,14 @@ def edit_username(request):
 
     return render(request, 'edit_username.html')
 
+def favor(request):
+    docid = int(request.POST['docid'])
+    document = Document.objects.get(pk=docid)
+    if document.favorites == True:
+        document.favorites = False
+    else:
+        document.favorites = True
+    document.save()
+    #return redirect('/editor')
+    return render(request, 'editor.html')
+
