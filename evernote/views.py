@@ -39,7 +39,12 @@ def registerpage(request):
            if User.objects.filter(email=email).exists():
                messages.info(request, 'email already Taken')
                return render(request, 'register.html')
-           
+
+           if User.objects.filter(username=username).exists():
+               messages.info(request, 'username already Taken')
+               return render(request, 'register.html')
+            
+
            else:     
              user = User.objects.create_user(username=username, email=email, password=psw1)
              user.save();
