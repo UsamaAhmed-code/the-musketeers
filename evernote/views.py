@@ -1,9 +1,11 @@
 
 
+
 from email.message import EmailMessage
 from multiprocessing import context
 from pickle import FALSE
 from telnetlib import DO
+
 from typing_extensions import Self
 from xml.sax import xmlreader
 from django.http import HttpResponse, HttpResponseRedirect
@@ -25,7 +27,9 @@ def registerpage(request):
  
    if request.method == 'POST':
 
+
        username = request.POST.get('username')
+
 
        email = request.POST.get('email')
        psw1= request.POST.get('psw')
@@ -40,12 +44,19 @@ def registerpage(request):
              user = User.objects.create_user(username=username, email=email, password=psw1)
              user.save();
 
+
             
              return redirect( 'login')
 
             
 
            
+
+             messages.info(request, 'sign up successfully')
+             return render(request, 'register.html')
+           
+
+
              
        else :
              messages.info(request, 'password not match')
@@ -61,20 +72,25 @@ def registerpage(request):
 def loginpage(request):
 
      if request.method == 'POST' :
+
          username = request.POST.get('username')
+
          password = request.POST['password']
          
          user = auth.authenticate(username=username, password=password)
 
          if user is not None:
              auth.login(request, user)
+
              return redirect('/editor')
+
          else :
              messages.info(request, 'invalid credentials') 
              return redirect( 'login')
 
      else :  
         return render(request, 'login.html')
+
 
 def logout_view(request):
     logout(request)
@@ -95,6 +111,7 @@ def editor(request):
     if request.method == 'POST':
      
       
+
         docid = int(request.POST.get('docid', 0))
         title = request.POST.get('title')
         content = request.POST.get('content', '')
@@ -106,6 +123,7 @@ def editor(request):
             document.content = content
             document.save()
 
+
             return redirect('/editor/?docid='+str(docid) )
         else:
             if Document.objects.filter(title=title).exists():
@@ -115,6 +133,7 @@ def editor(request):
             else:
                  document = Document.objects.create(title=title, content=content, author=author )
                  return redirect('/editor' )
+
 
     if docid > 0:
         document = Document.objects.get(pk=docid)
@@ -126,20 +145,22 @@ def editor(request):
         'docid': docid,
         'documents' : documents,
         'document' : document,
+
         'author' : author,
         'form' : form, 
          }
+
 
     return render(request, 'editor.html', context)
 
     
 
-    
 def delete_document(request, docid):
     document = Document.objects.get(pk=docid)
     document.delete()
 
     return redirect('/editor')
+
 
     
 
@@ -153,6 +174,7 @@ def contactpage(request):
         contact.save()
     return render(request, "contact.html")    
 
+
 def edit_username(request):
     if request.method == 'POST':
         username = request.user.username
@@ -162,16 +184,19 @@ def edit_username(request):
         if newusername != newusername2:
             print("check1")
             messages.info(request, 'Name doesnot match please check')
+
             return render(request, 'edit_username.html')
         elif User.objects.filter(username=newusername).exists():
             messages.info(request, 'The username is not available')
             return render(request, 'edit_username.html')
         
+
         else:
             user = User.objects.get(username= username)
             user.username = newusername
             print("okay")
             user.save()
+
             return redirect('/editor')
 
     return render(request, 'edit_username.html')
@@ -182,6 +207,7 @@ from django.db.models import Q
 
 def searchposts(request):
 
+
     if request.method == 'POST':
         query= request.POST.get('q')
 
@@ -189,6 +215,7 @@ def searchposts(request):
 
         if query is None:
           return render(request, 'editor.html')
+
 
         if query is not None:
             lookups= Q(title__icontains=query) | Q(content__icontains=query)
@@ -198,16 +225,22 @@ def searchposts(request):
 
            
 
+            results= Document.objects.filter(lookups).distinct()
+
+
             context={'results': results,
                      'submitbutton': submitbutton}
+
 
             return render(request, 'search.html', context)
 
         else:
             return render(request, 'search.html')
 
+
     else:
         return render(request, 'editor.html')
+
 
 def check_change(request):
 
@@ -261,3 +294,4 @@ def favor(request):
     #return redirect('/editor')
     return render(request, 'editor.html')
 
+\

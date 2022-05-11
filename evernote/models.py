@@ -1,5 +1,16 @@
 
+
 from genericpath import exists
+
+import email
+from email import message
+from lzma import MODE_NORMAL
+from urllib import request
+
+
+
+from xml.dom.minidom import Document
+
 from django.db import models
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
@@ -30,4 +41,3 @@ class Contact(models.Model):
      content= models.TextField()
      timeStamp=models.DateTimeField(auto_now_add=True, blank=True)
 
-   
