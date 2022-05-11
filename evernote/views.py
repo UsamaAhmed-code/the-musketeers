@@ -156,7 +156,28 @@ def edit_username(request):
 
     return render(request, 'edit_username.html')
 
+
+
+
+def check_change(request):
+
+    docid = int(request.POST.get('docid', 0))
+    title = request.POST.get('title')
+    content = request.POST.get('content', '')
+
+    if docid > 0:
+        document = Document.objects.get(pk=docid)
+        document.title = title
+        document.content = content
+        document.save()
+        return HttpResponse("Auto Saved")
+    else:
+        document = Document.objects.create(title=title, content=content, author=author)
+           
+        return HttpResponse("Not Saved")
+
     return render(request, 'edit_username.html')
+
 
 def favor(request):
     docid = int(request.POST['docid'])
