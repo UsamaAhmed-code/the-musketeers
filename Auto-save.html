@@ -1,6 +1,5 @@
 <!DOCTYPE html> {% load static %} {% load crispy_forms_tags %}
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,13 +18,12 @@
             <img src="{% static '/image/Evernotelogo.png'  %}" width="60" length="100">
         </div>
 
-
         <div class="navbar-menu">
         </div>
         <div>
             <h1>EVERNOTE</h1>
         </div>
-        </div>
+        
         <div class="navbar-end">
 
             <a href="{% url 'editor' %}" class="navbar-item">Notes</a>
@@ -33,7 +31,7 @@
             <h1>logged in as {{user.username}}</h1>
             <a class="navbar-item">logout</a>
         </div>
-        </div>
+        
     </nav>
 
     <section class="section">
@@ -106,6 +104,7 @@
                     <form>
                         customKeyPrefix: ’, timeout: 0, onSave: function() {}, onRestore: function() {}, onRelease: function() {}
                     </form>
+                </form>
             </div>
         </div>
     </section>
@@ -118,9 +117,9 @@
             document.getElementById('add-btn').click();
         }
     </script>
-
-
-
+    
+    
+    
 </body>
-
+    
 </html>
