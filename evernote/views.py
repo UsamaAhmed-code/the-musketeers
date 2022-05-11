@@ -1,3 +1,4 @@
+
 from contextlib import contextmanager
 from email import message
 from multiprocessing import context
@@ -7,12 +8,20 @@ from django.http import HttpResponse
 # Create your views here.
 from django.http import HttpResponse
 from django.contrib.auth.models import User, auth
+
 from evernote.models import  CountPage, Document, displayusername
 from django.contrib import messages
 from django import forms
 from .forms import CreateNoteForm
 from django.contrib.auth.models import User
 
+
+
+
+from evernote.models import  CountPage, Document
+from django.contrib import messages
+from django import forms
+from .forms import CreateNote
 
 
 def registerpage(request):
@@ -49,6 +58,7 @@ def loginpage(request):
 
          if user is not None:
              auth.login(request, user)
+
              return redirect( 'editor')
          else :
              messages.info(request, 'invalid credentials') 
@@ -68,6 +78,7 @@ def home(request):
 
 def logout(request):
     auth.logout(request)
+
     return redirect('/login')
 
 def editor(request):
@@ -113,11 +124,13 @@ def delete_document(request, docid):
 
     return redirect('/editor')
 
+
 def showusername(request):
     displaynames=User.objects.all()
     return render(request, 'editor.html', {"displayusername":displaynames})     
 
 
+    
 def edit_username(request):
     if request.method == 'POST':
         username = request.user.username
@@ -142,3 +155,16 @@ def edit_username(request):
             return redirect('editor/')
 
     return render(request, 'edit_username.html')
+
+    return render(request, 'edit_username.html')
+
+def favor(request):
+    docid = int(request.POST['docid'])
+    document = Document.objects.get(pk=docid)
+    if document.favorites == True:
+        document.favorites = False
+    else:
+        document.favorites = True
+    document.save()
+    #return redirect('/editor')
+    return render(request, 'editor.html')

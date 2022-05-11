@@ -1,0 +1,198 @@
+
+
+<!DOCTYPE html>
+{% load static %}
+{% load crispy_forms_tags %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Notes</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    </head>
+
+    <body>
+        <style>
+           
+            h5{text-align: left}
+            .box {
+  width: 40%;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.2);
+  padding: 35px;
+  border: 2px solid #fff;
+  border-radius: 20px/50px;
+  background-clip: padding-box;
+  text-align: center;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  transition: opacity 500ms;
+  visibility: hidden;
+  opacity: 0;
+}
+.overlay:target {
+  visibility: visible;
+  opacity: 1;
+}
+
+.popup {
+  margin: 70px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 5px;
+  width: 30%;
+  position: relative;
+  transition: all 5s ease-in-out;
+}
+
+.popup h2 {
+  margin-top: 0;
+  color: #333;
+  font-family: Tahoma, Arial, sans-serif;
+}
+.popup .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  transition: all 200ms;
+  font-size: 30px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+}
+.popup .close:hover {
+  color: #06D85F;
+}
+.popup .content {
+  max-height: 30%;
+  overflow: auto;
+}
+            
+        </style>
+        <nav style="background-color:rgb(120, 225, 102)">
+            <div class="navbar-brand">
+                <img src="{% static '/image/Evernotelogo.png'  %}" width="60" length="100">
+            </div>
+             
+
+            <div class="navbar-menu">
+            </div>
+            <div> <h1>EVERNOTE</h1>
+            </div>
+         </div>
+                <div class="navbar-end">
+        
+                    <a href="{% url 'editor' %}" class="navbar-item">Notes</a>
+                    <a href="{% url 'editor' %}?docid=0" class="navbar-item">New document</a>
+                    <h1>logged in as {{user.username}}</h1>
+                    <a class="navbar-item">logout</a>
+                </div>
+            </div>
+        </nav>
+
+        <section class="section">
+            <div class="columns">
+                <div class="column is-2">
+                    <aside class="menu">
+                        <p class="menu-label">Documents</p>
+
+                        <ul class="menu-list">
+                            {% for doc in documents %}
+                                <li>
+                                    <a href="{% url 'editor' %}?docid={{ doc.id }}">{{ doc.title }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                </div>
+
+
+                <div class="column is-10">
+                    <form method="post" action="{% url 'editor' %}">
+                        {% csrf_token %}
+                    
+                       
+
+                        <input type="hidden" name="docid" value="{{ docid }}">
+
+                        <div>
+                        <h3>
+                            <b>{{user.username}}</b> 
+                        </h3>
+                        <a href="{% url 'edit_username' %}" class="button is-danger">Edit Username</a>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">
+                                Title
+
+                                {% if document %}
+                                    <span class="has-text-grey-light">
+                                        Created at: {{ document.created_at|date:"m/d Y" }} / 
+                                        Modified at: {{ document.modified_at|date:"m/d Y" }}
+                                    </span>
+                                {% endif %}
+                            </label>
+
+                            <div class="control">
+                                <input type="text" class="input" name="title" placeholder="Title"{% if document %} value="{{ document.title }}"{% endif %}>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Content</label>
+                    
+                            <div class="control">
+                         
+                                <textarea class="textarea" name="content" placeholder="Content">{% if document %}{{ document.content }}{% endif %}</textarea>
+                            </div>
+                        </div>
+
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <button class="button is-primary">Save</button>
+                            </div>
+                            {% if document %}
+                                <div class="control">
+                                    <a href="{% url 'delete_document' document.id %}" class="button is-danger">Delete</a>
+                                </div>
+                            <div class="control">
+                                    <a href="#popup1" class="button is-secondary">View</a>
+                                </div>
+                                <div id="popup1" class="overlay">
+    <div class="popup">
+        <h2>{{ document.title }}</h2>
+        <a class="close" href="#">&times;</a>
+        <div class="content">
+            {{ document.content }}
+        </div>
+    </div>
+</div>
+                            {% endif %}
+                        </div>
+                    </form>
+
+                    <form>
+                        <form method="post" action=" ">
+                            {% csrf_token %}
+                            
+                            {{form.media}}
+
+                    </form>
+                </div>
+            </div>
+        </section>
+        <script src="C:\Users\usama\SDPproject\evernote\Templates\ckeditor/ckeditor.js" ></script>
+        <script>
+            CKEDITOR.replace('content');
+        </script>
+        
+    </body>
+</html>

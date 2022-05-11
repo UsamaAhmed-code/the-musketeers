@@ -1,3 +1,4 @@
+
 import email
 from lzma import MODE_NORMAL
 from urllib import request
@@ -22,4 +23,5 @@ class Meta:
 
 class displayusername(models.Model):
     username= models.CharField(max_length=100) 
+
 

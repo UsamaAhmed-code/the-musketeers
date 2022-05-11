@@ -1,0 +1,5 @@
+#steps to run the unit test cases.
+
+1- add the unittesing extension in VScode.
+2- select the root directory. the test case file. (Test*.py)
+3- open the terminal in VScode and run command " python manage.py test"
