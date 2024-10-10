@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -7,17 +6,10 @@
     <title>Notes</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
 </head>  
-  
-
-
 <style>
 body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box;}
-
-/* Full-width input fields */
-input[type=text], input[type=password] {
-  width: 100%;
-  padding: 15px;
+	@@ -11,7 +17,7 @@
   margin: 5px 0 22px 0;
   display: inline-block;
   border: none;
@@ -25,10 +17,7 @@ input[type=text], input[type=password] {
 }
 
 /* Add a background color when the inputs get focus */
-input[type=text]:focus, input[type=password]:focus {
-  background-color: #ddd;
-  outline: none;
-}
+	@@ -22,7 +28,7 @@
 
 /* Set a style for all buttons */
 button {
@@ -36,9 +25,7 @@ button {
   color: rgb(223, 233, 222);
   padding: 14px 20px;
   margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
+	@@ -32,14 +38,17 @@
   opacity: 0.9;
 }
 
@@ -56,10 +43,7 @@ button {
 }
 
 /* Float cancel and signup buttons and add an equal width */
-.cancelbtn, .signupbtn {
-  float: left;
-  width: 50%;
-}
+	@@ -50,41 +59,24 @@
 
 /* Add padding to container elements */
 .container {
@@ -79,19 +63,12 @@ hr {
   border: 1px solid #0a54e9;
   margin-bottom: 25px;
 }
- 
+
 
 /* Clear floats */
 .clearfix::after {
   content: "";
-  clear: both;
-  display: table;
-}
-
-/* Change styles for cancel button and signup button on extra small screens */
-@media screen and (max-width: 300px) {
-  .cancelbtn, .signupbtn {
-     width: 100%;
+	@@ -99,32 +91,56 @@
   }
 }
 h1{text-align: center}
@@ -153,6 +130,7 @@ h1{text-align: center}
       <label ><b>Password</b></label>
       <input type="password" placeholder="Enter Password" name="psw" pattern=".{8,}" title="Password should contain 8 or more character!" required>
       <label ><b>Repeat Password</b></label>
+
       <input type="password" placeholder="Repeat Password" name="psw-repeat"  required>
       
      

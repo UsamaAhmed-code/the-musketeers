@@ -1,65 +1,33 @@
+<html>
+    <head>
 
-<!-- Image and text -->
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notes App</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-
-<body>
-    <nav class="navbar navbar-dark" style="background-color: darkcyan;">
-        <a class="navbar-brand" href="#">
-            <img src="https://cdn.pixabay.com/photo/2015/10/31/12/28/n-1015542_640.jpg" width="50" height="30"
-                class="d-inline-block align-top" alt="">
-                Notes App
-        </a>
-
-        <a href="{% url 'upload-note' %}" class="navbar-link btn-lg" style="background-color:#FFCC33;color:#000000;">Add
-            Note</a>
-    </nav>
-    <br>
-    {% block content %}
-    <div class="card-columns">
-        {% for note in notes %}
-        {% if note.picture %}
-        <div class="card" style="width: 22rem;">
-            <img class="card-img-top" src="{{ note.picture.url }}">
-            <div class="card-body">
-                <h5 class="card-title">{{ note.heading }}</h5>
-                <p class="card-text">{{ note.describe }}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <a href="update/{{note.id}}" class="btn btn-sm btn-outline-secondary" id= '{{note.id}}'>Edit</a>
-                      <a href="delete/{{note.id}}" class="btn btn-sm btn-outline-secondary" id= '{{note.id}}'>Delete</a>
-                    </div>
-                    <small class="text-muted">{{note.date}}</small>
-                  </div>
-            </div>
-        </div>
-        {% else %}
-        <div class="card" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">{{ note.heading }}</h5>
-                <p class="card-text">{{ note.describe }}</p>
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="btn-group">
-                      <a href="update/{{note.id}}" class="btn btn-sm btn-outline-secondary" id= '{{note.id}}'>Edit</a>
-                      <a href="delete/{{note.id}}" class="btn btn-sm btn-outline-secondary" id= '{{note.id}}'>Delete</a>
-                    </div>
-                    <small class="text-muted">{{note.date}}</small>
-                  </div>
-            </div>
-        </div>    
-        {% endif %}
-        {% endfor %}
+    </head>
+    <body>
+        {% load static %}
+        <style>
+           
+            h1{text-align: center}
+            input.right {
+        float: right;
+      }
+        </style>
+        <meta charset="utf-8">
+        <meta name="home" content="width=device-width, initial-scale=1">
+        <title>Count page</title>
+    <div>
+          <div>
+               <div><img src="{% static '/image/Evernotelogo.png'  %}" width="60" length="100"></div>
+               <div><input type="button" value="logout" class="right"></div>
+            </div> 
+                <div><h1 style="background-color:rgb(44, 185, 25);">Welcome To Evernote </h1></div>  
+           
+           <div> 
+                   <div><h2>the page count is  {{items.content}}</h2></div><div><input type="text" placeholder="Search.."></div>
+                
+            </div>       
     </div>
-    {% endblock %}
-</body>
-
+      
+       
+      
+    </body>
 </html>
